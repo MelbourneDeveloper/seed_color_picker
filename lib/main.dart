@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
     child: DefaultTabController(
-      length: 4,
+      length: 6,
       child: Scaffold(
         appBar: AppBar(
           title: Row(
@@ -117,12 +117,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
           bottom: TabBar(
-            tabAlignment: TabAlignment.fill,
+            isScrollable: true,
             tabs: const [
               Tab(text: 'Colors', icon: Icon(Icons.palette)),
               Tab(text: 'Buttons', icon: Icon(Icons.smart_button)),
               Tab(text: 'Cards', icon: Icon(Icons.credit_card)),
               Tab(text: 'Inputs', icon: Icon(Icons.input)),
+              Tab(text: 'Animations', icon: Icon(Icons.animation)),
+              Tab(text: 'Lists', icon: Icon(Icons.list)),
             ],
           ),
         ),
@@ -132,6 +134,8 @@ class _MyHomePageState extends State<MyHomePage> {
             _ButtonShowcase(),
             _CardShowcase(),
             _InputShowcase(),
+            _AnimationShowcase(),
+            _ListShowcase(),
           ],
         ),
       ),
@@ -426,6 +430,371 @@ class _InputShowcase extends StatelessWidget {
             Checkbox(value: true, onChanged: (_) {}),
             Radio(value: true, groupValue: true, onChanged: (_) {}),
           ],
+        ),
+      ],
+    ),
+  );
+}
+
+class _AnimationShowcase extends StatefulWidget {
+  @override
+  State<_AnimationShowcase> createState() => _AnimationShowcaseState();
+}
+
+class _AnimationShowcaseState extends State<_AnimationShowcase>
+    with TickerProviderStateMixin {
+  late final AnimationController _pulseController;
+  late final AnimationController _slideController;
+  late final AnimationController _rotateController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _slideController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..repeat();
+
+    _rotateController = AnimationController(
+      duration: const Duration(seconds: 4),
+      vsync: this,
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    _slideController.dispose();
+    _rotateController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => SingleChildScrollView(
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Color Animations', style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 16),
+        _AnimatedSection(
+          title: 'Pulse Animation (primary & secondary)',
+          description:
+              'Demonstrates color opacity animation between primary and secondary colors',
+          child: AnimatedBuilder(
+            animation: _pulseController,
+            builder:
+                (context, child) => Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primary.withValues(
+                          alpha: _pulseController.value * 255,
+                          red: Theme.of(context).colorScheme.primary.r,
+                          green: Theme.of(context).colorScheme.primary.g,
+                          blue: Theme.of(context).colorScheme.primary.b,
+                        ),
+                        Theme.of(context).colorScheme.secondary.withValues(
+                          alpha: (1 - _pulseController.value) * 255,
+                          red: Theme.of(context).colorScheme.secondary.r,
+                          green: Theme.of(context).colorScheme.secondary.g,
+                          blue: Theme.of(context).colorScheme.secondary.b,
+                        ),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Pulsing Gradient',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+        ),
+        _AnimatedSection(
+          title: 'Sliding Animation (tertiary)',
+          description: 'Shows a sliding animation with tertiary color',
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              height: 100,
+              child: AnimatedBuilder(
+                animation: _slideController,
+                builder:
+                    (context, child) => Stack(
+                      children: [
+                        Positioned(
+                          left: _slideController.value * 300 - 100,
+                          top: 0,
+                          bottom: 0,
+                          child: Container(
+                            width: 200,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Theme.of(
+                                    context,
+                                  ).colorScheme.tertiary.withValues(
+                                    alpha: 0,
+                                    red:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.tertiary.r,
+                                    green:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.tertiary.g,
+                                    blue:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.tertiary.b,
+                                  ),
+                                  Theme.of(context).colorScheme.tertiary,
+                                  Theme.of(
+                                    context,
+                                  ).colorScheme.tertiary.withValues(
+                                    alpha: 0,
+                                    red:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.tertiary.r,
+                                    green:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.tertiary.g,
+                                    blue:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.tertiary.b,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          color:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          child: Center(
+                            child: Text(
+                              'Sliding Highlight',
+                              style: TextStyle(
+                                color:
+                                    Theme.of(
+                                      context,
+                                    ).colorScheme.onTertiaryContainer,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+              ),
+            ),
+          ),
+        ),
+        _AnimatedSection(
+          title: 'Rotating Gradient (error colors)',
+          description: 'Demonstrates a rotating gradient using error colors',
+          child: AnimatedBuilder(
+            animation: _rotateController,
+            builder:
+                (context, child) => Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    gradient: SweepGradient(
+                      transform: GradientRotation(
+                        _rotateController.value * 6.28,
+                      ),
+                      colors: [
+                        Theme.of(context).colorScheme.error,
+                        Theme.of(context).colorScheme.errorContainer,
+                        Theme.of(context).colorScheme.error,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Rotating Gradient',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onError,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class _AnimatedSection extends StatelessWidget {
+  final String title;
+  final String description;
+  final Widget child;
+
+  const _AnimatedSection({
+    required this.title,
+    required this.description,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 24),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 4),
+        Text(description, style: Theme.of(context).textTheme.bodyMedium),
+        const SizedBox(height: 12),
+        child,
+      ],
+    ),
+  );
+}
+
+class _ListShowcase extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => SingleChildScrollView(
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('List Examples', style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 16),
+        Card(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  child: Icon(
+                    Icons.person,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+                title: const Text('Primary Color Avatar'),
+                subtitle: const Text('With onPrimary icon'),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              Divider(color: Theme.of(context).colorScheme.outlineVariant),
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  child: Icon(
+                    Icons.favorite,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
+                ),
+                title: const Text('Secondary Color Avatar'),
+                subtitle: const Text('With onSecondary icon'),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+              Divider(color: Theme.of(context).colorScheme.outlineVariant),
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.tertiary,
+                  child: Icon(
+                    Icons.star,
+                    color: Theme.of(context).colorScheme.onTertiary,
+                  ),
+                ),
+                title: const Text('Tertiary Color Avatar'),
+                subtitle: const Text('With onTertiary icon'),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+        Card(
+          child: Column(
+            children: [
+              Container(
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.inbox,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Surface Container Highest',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            'With primary color icon',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                color: Theme.of(context).colorScheme.surface,
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.mail,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Surface Background',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            'With secondary color icon',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     ),

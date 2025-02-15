@@ -184,12 +184,7 @@ class _ColorPalette extends StatelessWidget {
   const _ColorPalette({required this.seedColor});
 
   @override
-  Widget build(BuildContext context) => GridView.count(
-    crossAxisCount: 3,
-    childAspectRatio: 1.5,
-    padding: const EdgeInsets.all(16),
-    mainAxisSpacing: 16,
-    crossAxisSpacing: 16,
+  Widget build(BuildContext context) => Wrap(
     children: [
       _ColorBox(color: seedColor, name: 'seed'),
       _ColorBox(color: Theme.of(context).colorScheme.primary, name: 'primary'),
@@ -286,9 +281,9 @@ class _ColorBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(8),
+    padding: const EdgeInsets.all(12),
     child: Container(
-      height: 100,
+      height: 160,
       width: 200,
       decoration: BoxDecoration(
         color: color,

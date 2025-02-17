@@ -117,34 +117,26 @@ class _MainPageState extends State<MainPage> {
   );
 
   void _showColorPicker(BuildContext context) {
-    showDialog(
+    showModalBottomSheet(
       context: context,
+      barrierColor: Colors.transparent,
       builder:
-          (context) => AlertDialog(
-            title: const Text('Pick a color'),
-            content: SingleChildScrollView(
-              child: ColorPicker(
-                pickerColor: _seedColor,
-                onColorChanged: (color) {
-                  setState(() {
-                    _seedColor = color;
-                    _textEditingController.text =
-                        '${color.a.round().toRadixString(16).padLeft(2, '0')}'
-                                '${color.r.round().toRadixString(16).padLeft(2, '0')}'
-                                '${color.g.round().toRadixString(16).padLeft(2, '0')}'
-                                '${color.b.round().toRadixString(16).padLeft(2, '0')}'
-                            .toUpperCase();
-                  });
-                },
-                pickerAreaHeightPercent: 0.8,
-              ),
+          (context) => SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: _seedColor,
+              onColorChanged: (color) {
+                setState(() {
+                  _seedColor = color;
+                  _textEditingController.text =
+                      '${color.a.round().toRadixString(16).padLeft(2, '0')}'
+                              '${color.r.round().toRadixString(16).padLeft(2, '0')}'
+                              '${color.g.round().toRadixString(16).padLeft(2, '0')}'
+                              '${color.b.round().toRadixString(16).padLeft(2, '0')}'
+                          .toUpperCase();
+                });
+              },
+              pickerAreaHeightPercent: 0.8,
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Done'),
-              ),
-            ],
           ),
     );
   }

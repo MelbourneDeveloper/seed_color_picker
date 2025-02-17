@@ -446,14 +446,22 @@ class _AnimationShowcaseState extends State<_AnimationShowcase>
   late final AnimationController _pulseController;
   late final AnimationController _slideController;
   late final AnimationController _rotateController;
+  late final Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
     _pulseController = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 8),
+      lowerBound: 0,
+      upperBound: .1,
       vsync: this,
     )..repeat(reverse: true);
+
+    _pulseAnimation = CurvedAnimation(
+      parent: _pulseController,
+      curve: Curves.linear,
+    );
 
     _slideController = AnimationController(
       duration: const Duration(seconds: 3),
@@ -487,21 +495,17 @@ class _AnimationShowcaseState extends State<_AnimationShowcase>
           description:
               'Demonstrates color opacity animation between primary and secondary colors',
           child: AnimatedBuilder(
-            animation: _pulseController,
+            animation: _pulseAnimation,
             builder:
-                (context, child) => Container(
+                (context, _) => Container(
                   height: 100,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Theme.of(context).colorScheme.primary.withValues(
-                          alpha: _pulseController.value * 255,
-                          red: Theme.of(context).colorScheme.primary.r,
-                          green: Theme.of(context).colorScheme.primary.g,
-                          blue: Theme.of(context).colorScheme.primary.b,
-                        ),
+                        Theme.of(context).colorScheme.primary,
                         Theme.of(context).colorScheme.secondary.withValues(
-                          alpha: (1 - _pulseController.value) * 255,
+                          alpha:
+                              ((1 - _pulseAnimation.value) * 0.3 + 0.7) * 255,
                           red: Theme.of(context).colorScheme.secondary.r,
                           green: Theme.of(context).colorScheme.secondary.g,
                           blue: Theme.of(context).colorScheme.secondary.b,

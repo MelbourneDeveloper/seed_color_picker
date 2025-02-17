@@ -26,14 +26,12 @@ class _MainPageState extends State<MainPage> {
     data:
         _brightness == Brightness.light
             ? ThemeData(
-              useMaterial3: true,
               colorScheme: ColorScheme.fromSeed(
                 seedColor: _seedColor,
                 brightness: Brightness.light,
               ),
             )
             : ThemeData(
-              useMaterial3: true,
               colorScheme: ColorScheme.fromSeed(
                 seedColor: _seedColor,
                 brightness: Brightness.dark,
@@ -118,24 +116,30 @@ class _MainPageState extends State<MainPage> {
 
   void _showColorPicker(BuildContext context) {
     showModalBottomSheet(
+      elevation: 3,
+
       context: context,
       barrierColor: Colors.transparent,
       builder:
           (context) => SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: _seedColor,
-              onColorChanged: (color) {
-                setState(() {
-                  _seedColor = color;
-                  _textEditingController.text =
-                      '${color.a.round().toRadixString(16).padLeft(2, '0')}'
-                              '${color.r.round().toRadixString(16).padLeft(2, '0')}'
-                              '${color.g.round().toRadixString(16).padLeft(2, '0')}'
-                              '${color.b.round().toRadixString(16).padLeft(2, '0')}'
-                          .toUpperCase();
-                });
-              },
-              pickerAreaHeightPercent: 0.8,
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: ColorPicker(
+                pickerColor: _seedColor,
+                onColorChanged: (color) {
+                  setState(() {
+                    _seedColor = color;
+                    _textEditingController.text =
+                        '${color.a.round().toRadixString(16).padLeft(2, '0')}'
+                                '${color.r.round().toRadixString(16).padLeft(2, '0')}'
+                                '${color.g.round().toRadixString(16).padLeft(2, '0')}'
+                                '${color.b.round().toRadixString(16).padLeft(2, '0')}'
+                            .toUpperCase();
+                  });
+                },
+                pickerAreaHeightPercent: 0.8,
+              ),
             ),
           ),
     );

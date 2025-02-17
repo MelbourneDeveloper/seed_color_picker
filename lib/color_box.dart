@@ -12,7 +12,7 @@ class ColorBox extends StatelessWidget {
     padding: const EdgeInsets.all(12),
     child: Container(
       height: 160,
-      width: 200,
+      width: 160,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(8),
@@ -25,7 +25,10 @@ class ColorBox extends StatelessWidget {
         ],
       ),
       child: Center(
-        child: Text(name, style: TextStyle(color: contrastColor(color))),
+        child: Text(
+          name,
+          style: TextStyle(color: contrastColor(color)).copyWith(fontSize: 12),
+        ),
       ),
     ),
   );

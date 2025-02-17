@@ -28,20 +28,20 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) => const MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'Material Theme Builder',
-    home: MyHomePage(),
+    home: MainPage(),
   );
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
 const initialColor = Color(0xFFEE3333);
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainPageState extends State<MainPage> {
   final _textEditingController = TextEditingController(text: 'FFEE3333');
   var _seedColor = initialColor;
   bool _isValid = true;
@@ -130,11 +130,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: TabBarView(
           children: [
-            _ColorPalette(seedColor: _seedColor),
+            ColorPalette(seedColor: _seedColor),
             _ButtonShowcase(),
-            _CardShowcase(),
-            _InputShowcase(),
-            _AnimationShowcase(),
+            CardShowcase(),
+            InputShowcase(),
+            AnimationShowcase(),
             _ListShowcase(),
           ],
         ),
@@ -182,106 +182,103 @@ class _MyHomePageState extends State<MyHomePage> {
   });
 }
 
-class _ColorPalette extends StatelessWidget {
+class ColorPalette extends StatelessWidget {
   final Color seedColor;
 
-  const _ColorPalette({required this.seedColor});
+  const ColorPalette({super.key, required this.seedColor});
 
   @override
   Widget build(BuildContext context) => Wrap(
     children: [
-      _ColorBox(color: seedColor, name: 'seed'),
-      _ColorBox(color: Theme.of(context).colorScheme.primary, name: 'primary'),
-      _ColorBox(
+      ColorBox(color: seedColor, name: 'seed'),
+      ColorBox(color: Theme.of(context).colorScheme.primary, name: 'primary'),
+      ColorBox(
         color: Theme.of(context).colorScheme.errorContainer,
         name: 'errorContainer',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.inversePrimary,
         name: 'inversePrimary',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.inverseSurface,
         name: 'inverseSurface',
       ),
-      _ColorBox(color: Theme.of(context).colorScheme.error, name: 'error'),
-      _ColorBox(color: Theme.of(context).colorScheme.onError, name: 'onError'),
-      _ColorBox(
+      ColorBox(color: Theme.of(context).colorScheme.error, name: 'error'),
+      ColorBox(color: Theme.of(context).colorScheme.onError, name: 'onError'),
+      ColorBox(
         color: Theme.of(context).colorScheme.onErrorContainer,
         name: 'onErrorContainer',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.onInverseSurface,
         name: 'onInverseSurface',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.onPrimary,
         name: 'onPrimary',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.onSecondary,
         name: 'onSecondary',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.onSecondaryContainer,
         name: 'onSecondaryContainer',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.onSurface,
         name: 'onSurface',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.onSurfaceVariant,
         name: 'onSurfaceVariant',
       ),
-      _ColorBox(
-        color: Theme.of(context).colorScheme.tertiary,
-        name: 'tertiary',
-      ),
-      _ColorBox(
+      ColorBox(color: Theme.of(context).colorScheme.tertiary, name: 'tertiary'),
+      ColorBox(
         color: Theme.of(context).colorScheme.onTertiary,
         name: 'onTertiary',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.onTertiaryContainer,
         name: 'onTertiaryContainer',
       ),
-      _ColorBox(color: Theme.of(context).colorScheme.scrim, name: 'scrim'),
-      _ColorBox(color: Theme.of(context).colorScheme.outline, name: 'outline'),
-      _ColorBox(
+      ColorBox(color: Theme.of(context).colorScheme.scrim, name: 'scrim'),
+      ColorBox(color: Theme.of(context).colorScheme.outline, name: 'outline'),
+      ColorBox(
         color: Theme.of(context).colorScheme.outlineVariant,
         name: 'outlineVariant',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
         name: 'surfaceContainerHighest',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.surfaceContainerHigh,
         name: 'surfaceContainerHigh',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.surfaceContainer,
         name: 'surfaceContainer',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.surfaceContainerLow,
         name: 'surfaceContainerLow',
       ),
-      _ColorBox(
+      ColorBox(
         color: Theme.of(context).colorScheme.surfaceContainerLowest,
         name: 'surfaceContainerLowest',
       ),
-      _ColorBox(color: Theme.of(context).colorScheme.shadow, name: 'shadow'),
+      ColorBox(color: Theme.of(context).colorScheme.shadow, name: 'shadow'),
     ],
   );
 }
 
-class _ColorBox extends StatelessWidget {
+class ColorBox extends StatelessWidget {
   final Color color;
   final String name;
 
-  const _ColorBox({required this.color, required this.name});
+  const ColorBox({super.key, required this.color, required this.name});
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -344,7 +341,9 @@ class _ButtonShowcase extends StatelessWidget {
   );
 }
 
-class _CardShowcase extends StatelessWidget {
+class CardShowcase extends StatelessWidget {
+  const CardShowcase({super.key});
+
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
     padding: const EdgeInsets.all(16),
@@ -393,7 +392,9 @@ class _CardShowcase extends StatelessWidget {
   );
 }
 
-class _InputShowcase extends StatelessWidget {
+class InputShowcase extends StatelessWidget {
+  const InputShowcase({super.key});
+
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
     padding: const EdgeInsets.all(16),
@@ -436,12 +437,14 @@ class _InputShowcase extends StatelessWidget {
   );
 }
 
-class _AnimationShowcase extends StatefulWidget {
+class AnimationShowcase extends StatefulWidget {
+  const AnimationShowcase({super.key});
+
   @override
-  State<_AnimationShowcase> createState() => _AnimationShowcaseState();
+  State<AnimationShowcase> createState() => _AnimationShowcaseState();
 }
 
-class _AnimationShowcaseState extends State<_AnimationShowcase>
+class _AnimationShowcaseState extends State<AnimationShowcase>
     with TickerProviderStateMixin {
   late final AnimationController _pulseController;
   late final AnimationController _slideController;
@@ -490,7 +493,7 @@ class _AnimationShowcaseState extends State<_AnimationShowcase>
       children: [
         Text('Color Animations', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 16),
-        _AnimatedSection(
+        AnimatedSection(
           title: 'Pulse Animation (primary & secondary)',
           description:
               'Demonstrates color opacity animation between primary and secondary colors',
@@ -526,7 +529,7 @@ class _AnimationShowcaseState extends State<_AnimationShowcase>
                 ),
           ),
         ),
-        _AnimatedSection(
+        AnimatedSection(
           title: 'Sliding Animation (tertiary)',
           description: 'Shows a sliding animation with tertiary color',
           child: ClipRRect(
@@ -609,7 +612,7 @@ class _AnimationShowcaseState extends State<_AnimationShowcase>
             ),
           ),
         ),
-        _AnimatedSection(
+        AnimatedSection(
           title: 'Rotating Gradient (error colors)',
           description: 'Demonstrates a rotating gradient using error colors',
           child: AnimatedBuilder(
@@ -647,12 +650,13 @@ class _AnimationShowcaseState extends State<_AnimationShowcase>
   );
 }
 
-class _AnimatedSection extends StatelessWidget {
+class AnimatedSection extends StatelessWidget {
   final String title;
   final String description;
   final Widget child;
 
-  const _AnimatedSection({
+  const AnimatedSection({
+    super.key,
     required this.title,
     required this.description,
     required this.child,

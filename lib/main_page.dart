@@ -123,16 +123,16 @@ class _MainPageState extends State<MainPage> {
       builder:
           (context) => SizedBox(
             width: double.infinity,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: SizedBox(
-                  width: 300,
+            child: Center(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: SizedBox(
+                    width: 300,
 
-                  // height: 300,
-                  child: Center(
                     child: ColorPicker(
+                      enableAlpha: true,
                       portraitOnly: true,
                       pickerColor: _seedColor,
                       onColorChanged: (color) {
@@ -140,15 +140,14 @@ class _MainPageState extends State<MainPage> {
                           _seedColor = color;
                           _textEditingController.text =
                               '${(color.a * 255).round().toRadixString(16).padLeft(2, '0')}'
-                                      '${color.r.round().toRadixString(16).padLeft(2, '0')}'
-                                      '${color.g.round().toRadixString(16).padLeft(2, '0')}'
-                                      '${color.b.round().toRadixString(16).padLeft(2, '0')}'
+                                      '${(color.a * 255).round().toRadixString(16).padLeft(2, '0')}'
+                                      '${(color.a * 255).round().toRadixString(16).padLeft(2, '0')}'
+                                      '${(color.a * 255).round().toRadixString(16).padLeft(2, '0')}'
                                   .toUpperCase();
                         });
                       },
                       pickerAreaHeightPercent: 0.8,
-                      enableAlpha: false,
-                      hexInputBar: false,
+                      hexInputBar: true,
                     ),
                   ),
                 ),

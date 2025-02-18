@@ -138,12 +138,7 @@ class _MainPageState extends State<MainPage> {
                       onColorChanged: (color) {
                         setState(() {
                           _seedColor = color;
-                          _textEditingController.text =
-                              '${(color.a * 255).round().toRadixString(16).padLeft(2, '0')}'
-                                      '${(color.a * 255).round().toRadixString(16).padLeft(2, '0')}'
-                                      '${(color.a * 255).round().toRadixString(16).padLeft(2, '0')}'
-                                      '${(color.a * 255).round().toRadixString(16).padLeft(2, '0')}'
-                                  .toUpperCase();
+                          _textEditingController.text = color.toHexString();
                         });
                       },
                       pickerAreaHeightPercent: 0.8,
@@ -163,3 +158,5 @@ class _MainPageState extends State<MainPage> {
     if (_isValid) _seedColor = color!;
   });
 }
+
+

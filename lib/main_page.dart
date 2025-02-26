@@ -142,7 +142,7 @@ class _MainPageState extends State<MainPage> {
                         });
                       },
                       pickerAreaHeightPercent: 0.8,
-                      hexInputBar: true,
+                      hexInputBar: false,
                     ),
                   ),
                 ),

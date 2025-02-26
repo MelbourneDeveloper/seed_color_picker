@@ -1,0 +1,98 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+          architecture: x64
+          
+      - name: Enable WASM
+        run: flutter config --enable-web
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build WASM
+        run: flutter build web --wasm --release --base-href "/${{ github.event.repository.name }}/"
+          
+      - name: Update COOP and COEP headers
+        run: |
+          echo '{
+            "headers": [
+              {
+                "source": "**/*",
+                "headers": [
+                  {
+                    "key": "Cross-Origin-Embedder-Policy",
+                    "value": "credentialless"
+                  },
+                  {
+                    "key": "Cross-Origin-Opener-Policy",
+                    "value": "same-origin"
+                  }
+                ]
+              }
+            ]
+          }' > build/web/_headers
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+          
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'build/web'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Get Version
+        id: version
+        run: |
+          VERSION=$(grep 'version:' pubspec.yaml | sed 's/version: //')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Configure git
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          # Create tag
+          TAG_NAME="v${VERSION}"
+          git tag "$TAG_NAME"
+          git push origin "$TAG_NAME"
+          
+          # Create release
+          gh release create "$TAG_NAME" \
+            --title "v${VERSION} Web Release" \
+            --notes "Web deployment v${VERSION}" \
+            --target ${{ github.sha }} 
